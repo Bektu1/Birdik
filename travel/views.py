@@ -1,6 +1,7 @@
 from rest_framework import generics
-from .models import TravelItem, Review
-from .serializers import TravelItemSerializer, ReviewSerializer
+from .models import TravelItem, Review, FavoriteItem
+from .serializers import TravelItemSerializer, ReviewSerializer, FavoriteItemSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class TravelItemListCreateView(generics.ListCreateAPIView):
     queryset = TravelItem.objects.all()
@@ -28,3 +29,17 @@ class TravelItemReviewsView(generics.ListAPIView):
     def get_queryset(self):
         item_id = self.kwargs['item_id']
         return Review.objects.filter(travel_item=item_id)
+    
+
+class FavoriteItemListCreateView(generics.ListCreateAPIView):
+    queryset = FavoriteItem.objects.all()
+    serializer_class = FavoriteItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class FavoriteItemDetailView(generics.RetrieveDestroyAPIView):
+    queryset = FavoriteItem.objects.all()
+    serializer_class = FavoriteItemSerializer
+    permission_classes = [IsAuthenticated] 

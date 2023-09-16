@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class TravelItem(models.Model):
     name = models.CharField(max_length=100)
@@ -20,5 +21,12 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review for {self.travel_item.name} by {self.author}"
+    
 
+class FavoriteItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    travel_item = models.ForeignKey(TravelItem, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username}'s Favorite: {self.travel_item.name}"
 
