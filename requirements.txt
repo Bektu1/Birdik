@@ -4,6 +4,8 @@ Pillow
 python-decouple
 drf-yasg
 django-filter
+gunicorn
+whitenoise
 
 # обработчик задач
 celery
